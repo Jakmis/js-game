@@ -6,6 +6,9 @@ canvas.height = innerHeight;
 canvas.width = innerWidth;
 
 const scoreElement = document.querySelector('#scoreElement');
+const endScore = document.getElementById('endScore');
+const highScore = document.getElementById('highScore');
+const btn = document.querySelector('button');
 /*Player*/
 class Player {
     constructor(x, y, radius, color) {
@@ -135,6 +138,16 @@ function spawnEnemies(){
 
 let animationId
 let score = 0;
+let hScore = localStorage.getItem("highScore");
+    if (hScore !== null) {
+        if (score > hScore) {
+            localStorage.setItem("hScore", score);
+        }
+        else{
+            localStorage.setItem("hScore", score)
+        }
+    }
+    console.log(hScore);
 /*Opakující se funkce*/
 function animate() {
     animationId = requestAnimationFrame(animate);
@@ -170,13 +183,14 @@ function animate() {
         /*Ukončení hry, zastavení funkce animate*/
         if (distance - enemy.radius - player.radius < 1) {
             cancelAnimationFrame(animationId);
-
-            if(confirm("Score: "+score+"\n\nPlay again?")){
-                location.reload();
-            }
-            else{
-                alert("Thanks for playing!\n\nJakub Hudymač IT2")
-            }
+            endGame.style.display = "block";
+            endScore.innerHTML = score;
+            // if(confirm("Score: "+score+"\n\nPlay again?")){
+            //     location.reload();
+            // }
+            // else{
+            //     alert("Thanks for playing!\n\nJakub Hudymač IT2")
+            // }
                 
         }
 
@@ -239,6 +253,11 @@ window.addEventListener('click', function(event){
     )
 )
 })
+
+btn.addEventListener('click', function(){
+    location.reload();
+})
+
 
 animate();
 spawnEnemies();
